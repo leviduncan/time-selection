@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Timeslot Selection</title>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+            integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+            integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+        
+        <style>
+            #app {
+                display: flex;
+                flex-direction: column;
+            }
+
+            #app .heading h4 {
+                font-size: 20px;
+            }
+
+            #app .appt h4 {
+                font-size: 16px;
+                font-family: Arial;
+                font-weight: 700;
+                line-height: 24px;
+                text-align: center;
+                color: #29353A;
+                margin: 20px 0 10px;
+            }
+
+            #app h3 {
+                font-family: Arial;
+                font-size: 16px;
+                font-weight: 700;
+                text-align: center;
+                margin: 20px;
+                color: #29353A;
+            }
+
+            .selected {
+                border: solid 1px #64a535 !important;
+                background: #F0F7EC !important;
+                color: #43791d !important;
+                transition: 0.4s;
+            }
+
+            #app .appt .today {
+                border: unset !important;
+                background: unset !important;
+                color: #bbb !important;
+            }
+
+            #app .time-slots {
+                max-width: 570px;
+                width: 100%;
+                margin: 10px auto;
+            }
+
+            #app .time-slots .accord1 a,
+            #app .time-slots .accord2 a,
+            #app .time-slots .accord3 a {
+                color: #29353A;
+                font-family: 'Korolev', sans-serif;
+                font-weight: 500;
+                font-size: 18px;
+            }
+
+            #app .morning span,
+            #app .afternoon span,
+            #app .evening span {
+                float: right;
+            }
+
+            #app .morning,
+            #app .afternoon,
+            #app .evening {
+                display: block;
+                font-weight: bold;
+                font-size: 18px;
+                margin: 0 0 10px;
+                padding: 10px 0 5px;
+                font-family: 'Korolev', sans-serif;
+                border-bottom: 1px solid #aaa;
+                cursor: pointer;
+            }
+
+            #app .time-slots .times {
+                text-align: center;
+                padding: 5px;
+                border: solid 1px #bfc2c4;
+                border-radius: 6px;
+                color: #29353A;
+                min-width: 13%;
+                margin: 10px 0;
+                display: flex;
+                flex-direction: column;
+                cursor: pointer;
+                transition: 0.4s;
+            }
+
+            .times:hover {
+                border: solid 1px #64a535 !important;
+                background: #F0F7EC !important;
+                color: #43791d !important;
+                transition: 0.4s;
+            }
+
+            .date-carousel {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: Arial, sans-serif;
+                margin: 0 auto 30px;
+            }
+
+            .date-display {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+
+            .week {
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .week-display {
+                font-size: 16px;
+                font-weight: 700;
+                text-align: center;
+                margin: 0 10px;
+            }
+
+            .day-display {
+                font-size: 16px;
+                border: solid 1px #bfc2c4;
+                padding: 5px 0px;
+                border-radius: 6px;
+                text-align: center;
+                width: 14%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-around;
+                font-weight: 700;
+                color: #29353a;
+            }
+
+            .day-display .day {
+                font-weight: 400;
+            }
+
+            .day-display .full {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .day-display:hover {
+                border: solid 1px #64a535 !important;
+                background: #F0F7EC !important;
+                color: #43791d !important;
+            }
+
+            .nav-btns {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 0 20px 20px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                cursor: pointer;
+            }
+
+            .btn.focus,
+            .btn:focus,
+            .btn:hover {
+                color: #29353a;
+                text-decoration: none;
+            }
+
+            #prev-btn {
+                color: #ccc;
+            }
+
+            .hide-me {
+                display: none;
+            }
+
+            .sticky {
+                position: fixed;
+                top: 0;
+                left: 0;
+                box-shadow: 0 5px 5px #29353a23;
+                padding: 0 30px;
+            }
+
+            .sticky+.time-slots {
+                padding-top: 255px;
+            }
+
+            .appt-head {
+                background: #fff;
+                /* width: 100%; */
+                z-index: 100;
+                padding-top: 10px;
+                margin: 0 auto;
+            }
+
+            .btn-default {
+                font-family: 'Korolev', sans-serif;
+                font-size: 22px;
+                text-transform: capitalize;
+                background-color: #f76800;
+                border-color: #f76800;
+                color: #fff;
+                border-radius: 26px;
+                padding: 10px 30px 11px;
+                max-width: 337px;
+                margin: 10px auto;
+            }
+
+            .btn-block-mobile {
+                text-transform: capitalize;
+                border-radius: unset;
+                margin: 0 auto;
+            }
+
+            .continue {
+                position: fixed;
+                width: 100%;
+                background-color: #fff;
+                bottom: 0px;
+                left: 0;
+                z-index: 100;
+            }
+
+            #next-btn {
+                margin-left: unset;
+            }
+
+            .btn-group-sm .glyphicon-triangle-right,
+            .btn-sm .glyphicon-triangle-right,
+            .frozen-badge {
+                font-size: 15px;
+                padding: 0 5px;
+            }
+
+            header>nav.nav-bar-container.myaccount-nav div.navbar ul.navbar-nav {
+                max-width: unset;
+            }
+
+            @media (min-width: 768px) {
+                header>nav.nav-bar-container div.navbar ul.navbar-nav>li>a>span.nav-text {
+                    width: unset;
+                }
+
+                .hide-me {
+                    display: block;
+                }
+
+                .day-display .full {
+                    flex-direction: row;
+                }
+
+                #app .heading h4 {
+                    font-size: 28px;
+                }
+
+                .sticky {
+                    position: relative;
+                    padding: 0;
+                    box-shadow: unset;
+                }
+
+                .sticky+.time-slots {
+                    padding-top: 0;
+                }
+
+                .continue {
+                    position: unset;
+                }
+
+                .btn-default {
+                    margin: 30px auto;
+                }
+
+                .btn-block-mobile {
+                    margin: 10px auto;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="container">
+            <div id="app">
+                <!---------------------  CONTENT  -------------------------->
+                <div class="appt-head col-xs-12 col-lg-8" id="sticky">
+                    <div class="heading">
+                        <h4 class="marginbottom20 tk-korolev text-center">Select an appointment</h4>
+                    </div>
+
+                    <div class="appt">
+                        <div class="date-carousel">
+                            <div class="date-display">
+                                <div class="nav-btns">
+                                    <div class="btn" id="prev-btn"><</div>
+                                            <div class="week-display" id="week-display">Weekly</div>
+                                            <div class="btn" id="next-btn">></div>
+                                    </div>
+                                    <div class="week">
+                                        <div class="day-display" id="day-1" onclick="handleClickDayDates()">Mon</div>
+                                        <div class="day-display" id="day-2" onclick="handleClickDayDates()">Tuesdays
+                                        </div>
+                                        <div class="day-display" id="day-3" onclick="handleClickDayDates()">Wednesday
+                                        </div>
+                                        <div class="day-display" id="day-4" onclick="handleClickDayDates()">Thursday
+                                        </div>
+                                        <div class="day-display" id="day-5" onclick="handleClickDayDates()">Friday</div>
+                                        <div class="day-display" id="day-6" onclick="handleClickDayDates()">Saturday
+                                        </div>
+                                        <div class="day-display" id="day-7" onclick="handleClickDayDates()">Sunday</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3>Appointments are 15 minutes long</h3>
+                    </div>
+                    <div class="time-slots">
+                        <div class="accord1">
+                            <a data-target="#morning" class="morning column-head collapsed" role="button"
+                                data-toggle="collapse" aria-expanded="false" aria-controls="morning">Morning<span
+                                    class="glyphicon glyphicon-menu-down"></span>
+                            </a>
+                            <div id="morning" class="content collapse" aria-expanded="false">
+                                <div class="times">8:00 AM EST</div>
+                                <div class="times">8:20 AM EST</div>
+                                <div class="times">8:40 AM EST</div>
+                                <div class="times">9:00 AM EST</div>
+                                <div class="times">9:20 AM EST</div>
+                                <div class="times">9:40 AM EST</div>
+                                <div class="times">10:00 AM EST</div>
+                                <div class="times">10:20 AM EST</div>
+                                <div class="times">10:40 AM EST</div>
+                                <div class="times">11:00 AM EST</div>
+                                <div class="times">11:20 AM EST</div>
+                                <div class="times">11:40 AM EST</div>
+                            </div>
+                        </div>
+
+                        <div class="accord2">
+                            <a data-target="#afternoon" class="afternoon column-head" role="button"
+                                data-toggle="collapse" aria-expanded="false" aria-controls="afternoon">Afternoon<span
+                                    class="glyphicon glyphicon-menu-down"></span>
+                            </a>
+                            <div id="afternoon" class="content collapse" aria-expanded="false">
+                                <div class="times">12:00 PM EST</div>
+                                <div class="times">12:20 PM EST</div>
+                                <div class="times">12:40 PM EST</div>
+                                <div class="times">1:00 PM EST</div>
+                                <div class="times">1:20 PM EST</div>
+                                <div class="times">1:40 PM EST</div>
+                                <div class="times">2:00 PM EST</div>
+                                <div class="times">2:20 PM EST</div>
+                                <div class="times">2:40 PM EST</div>
+                                <div class="times">3:00 PM EST</div>
+                                <div class="times">3:20 PM EST</div>
+                                <div class="times">3:40 PM EST</div>
+                                <div class="times">4:00 PM EST</div>
+                                <div class="times">4:20 PM EST</div>
+                                <div class="times">4:40 PM EST</div>
+                            </div>
+                        </div>
+
+                        <div class="accord3">
+                            <a data-target="#evening" class="evening column-head" role="button" data-toggle="collapse"
+                                aria-expanded="false" aria-controls="evening">Evening<span
+                                    class="glyphicon glyphicon-menu-down"></span>
+                            </a>
+                            <div id="evening" class="content collapse" aria-expanded="false">
+                                <div class="times">5:00 PM EST</div>
+                                <div class="times">5:20 PM EST</div>
+                                <div class="times">5:40 PM EST</div>
+                                <div class="times">6:00 PM EST</div>
+                                <div class="times">6:20 PM EST</div>
+                                <div class="times">6:40 PM EST</div>
+                                <div class="times">7:00 PM EST</div>
+                                <div class="times">7:20 PM EST</div>
+                                <div class="times">7:40 PM EST</div>
+                                <div class="times">8:00 PM EST</div>
+                                <div class="times">8:20 PM EST</div>
+                                <div class="times">8:40 PM EST</div>
+                            </div>
+                        </div>
+                        <div class="continue">
+                            <a href="#" class="btn btn-default btn-sm btn-block">Continue<span
+                                    class="glyphicon glyphicon-triangle-right aria-hidden=" true"></span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    // sticky stuff
+                    window.onscroll = function () { stickyFunction() };
+
+                    var stickyBar = document.getElementById("sticky");
+                    var sticky = stickyBar.offsetTop;
+
+                    function stickyFunction() {
+                        if (window.pageYOffset >= sticky) {
+                            stickyBar.classList.add("sticky")
+                        } else {
+                            stickyBar.classList.remove("sticky");
+                        }
+                    }
+
+                    // schedule timer
+                    const monthNames = [
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec"
+                    ];
+
+                    let daysOfWeek = ["<div class='full'><div>Sun</div><div class='hide-me'>day</div></div>", "<div class='full'><div>Mon</div><div class='hide-me'>day</div></div>", "<div class='full'><div>Tue</div><div class='hide-me'>sday</div></div>", "<div class='full'><div>Wed</div><div class='hide-me'>nesday</div></div>", "<div class='full'><div>Thu</div><div class='hide-me'>rsday</div></div>", "<div class='full'><div>Fri</div><div class='hide-me'>day</div></div>", "<div class='full'><div>Sat</div><div class='hide-me'>urday</div></div>"];
+
+                    window.addEventListener("load", function () {
+                        const weekDisplay = document.getElementById("week-display");
+                        const day1 = document.getElementById("day-1");
+                        const day2 = document.getElementById("day-2");
+                        const day3 = document.getElementById("day-3");
+                        const day4 = document.getElementById("day-4");
+                        const day5 = document.getElementById("day-5");
+                        const day6 = document.getElementById("day-6");
+                        const day7 = document.getElementById("day-7");
+                        const prevBtn = document.getElementById("prev-btn");
+                        const nextBtn = document.getElementById("next-btn");
+
+                        let currentWeekStart = new Date();
+
+                        const dayOfWeek = currentWeekStart.getDay();
+                        const diff = currentWeekStart.getDate() - dayOfWeek + (dayOfWeek == 0 ? -7 : 0); // adjust when day is Sunday
+                        currentWeekStart.setDate(diff);
+
+                        let currentWeekEnd = new Date(currentWeekStart.getTime() + 6 * 24 * 60 * 60 * 1000);
+
+                        if (currentWeekEnd.getMonth() !== currentWeekStart.getMonth()) {
+                            currentWeekEnd.setDate(0); // set to last day of previous month
+                        }
+
+                        weekDisplay.innerHTML = `${currentWeekStart.getMonth() + 1}/${currentWeekStart.getDate()}/${currentWeekStart.getFullYear().toString().slice(-2)} - ${currentWeekEnd.getMonth() + 1}/${currentWeekEnd.getDate()}/${currentWeekEnd.getFullYear().toString().slice(-2)}`;
+
+                        //  Current Weekly Dates
+
+                        day1.innerHTML = `<span class="day">${daysOfWeek[(currentWeekStart.getDay()) % 7]}</span>${currentWeekStart.getDate()}`;
+
+                        let nextDay = new Date(currentWeekStart);
+
+                        nextDay.setDate(currentWeekStart.getDate() + 1);
+                        day2.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span>${nextDay.getDate()}`;
+
+                        nextDay.setDate(nextDay.getDate() + 1);
+                        day3.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span>${nextDay.getDate()}`;
+
+                        nextDay.setDate(nextDay.getDate() + 1);
+                        day4.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span>${nextDay.getDate()}`;
+
+                        nextDay.setDate(nextDay.getDate() + 1);
+                        day5.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span>${nextDay.getDate()}`;
+
+                        nextDay.setDate(nextDay.getDate() + 1);
+                        day6.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span>${nextDay.getDate()}`;
+
+                        nextDay.setDate(nextDay.getDate() + 1);
+                        day7.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span>${nextDay.getDate()}`;
+
+
+                        // Previous Weekly Dates
+
+                        prevBtn.addEventListener("click", function () {
+                            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+                            currentWeekEnd.setDate(currentWeekEnd.getDate() - 7);
+
+                            weekDisplay.innerHTML = `${currentWeekStart.getMonth() + 1}/${currentWeekStart.getDate()}/${currentWeekStart.getFullYear().toString().slice(-2)} - ${currentWeekEnd.getMonth() + 1}/${currentWeekEnd.getDate()}/${currentWeekEnd.getFullYear().toString().slice(-2)}`;
+
+                            day1.innerHTML = `<span class="day">${daysOfWeek[(currentWeekStart.getDay()) % 7]}</span>${currentWeekStart.getDate()}`;
+
+                            nextDay = new Date(currentWeekStart);
+                            nextDay.setDate(currentWeekStart.getDate() + 1);
+                            day2.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            day3.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            day4.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            day5.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            day6.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            day7.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+                        });
+
+                        // Next Weekly Dates
+
+                        nextBtn.addEventListener("click", function () {
+                            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+                            currentWeekEnd.setDate(currentWeekEnd.getDate() + 7);
+
+                            weekDisplay.innerHTML = `${currentWeekStart.getMonth() + 1}/${currentWeekStart.getDate()}/${currentWeekStart.getFullYear().toString().slice(-2)} - ${currentWeekEnd.getMonth() + 1}/${currentWeekEnd.getDate()}/${currentWeekEnd.getFullYear().toString().slice(-2)}`;
+
+                            day1.innerHTML = `<span class="day">${daysOfWeek[(currentWeekStart.getDay()) % 7]}</span>${currentWeekStart.getDate()}`;
+
+                            nextDay = new Date(currentWeekStart);
+                            nextDay.setDate(currentWeekStart.getDate() + 1);
+                            day2.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            day3.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            day4.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            day5.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            day6.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            day7.innerHTML = `<span class="day">${daysOfWeek[nextDay.getDay()]}</span> ${nextDay.getDate()}`;
+                        });
+
+                        // Keep track of selected time slots for each day
+                        const selectedTimeSlots = {};
+
+                        const timeSlots = document.querySelectorAll('.times');
+
+                        // Handle time slot clicks
+                        for (let i = 0; i < timeSlots.length; i++) {
+                            timeSlots[i].addEventListener("click", () => {
+                                const date = new Date();
+                                const slotDate = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+                                slotDate.setHours(timeSlots[i].dataset.hour);
+                                slotDate.setMinutes(timeSlots[i].dataset.minute);
+
+                                // Check if time slot is in the past
+                                if (slotDate < date) {
+                                    alert("You can not Change or choose dates in the past");
+                                    return;
+                                }
+
+                                // Deselect previous time slot for this day
+                                const dayIndex = timeSlots[i].dataset.day;
+                                if (selectedTimeSlots[dayIndex]) {
+                                    selectedTimeSlots[dayIndex].classList.remove("selected");
+                                }
+
+                                // Highlight the time slot and date
+                                timeSlots[i].classList.toggle("selected");
+                                selectedTimeSlots[dayIndex] = timeSlots[i];
+                            });
+                        }
+                    })
+
+                    function handleClickDayDates() {
+                        // this.classList.add('selected')
+                        console.log('I was clicked')
+                        for (let i = 0; i < 7; i++) {
+                            day - [i].classList.add("selected")
+                        }
+                    }
+                </script>
+                <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+                    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+                    crossorigin="anonymous"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+                    crossorigin="anonymous"></script>
+    </body>
+
+</html>

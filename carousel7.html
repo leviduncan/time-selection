@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Carousel Simple</title>
+        <style>
+            body {
+                font-family: Arial;
+            }
+
+            #date-scheduler {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #date-range-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            #day-dates-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            button {
+                padding: 10px 20px;
+                background-color: #00bfff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin: 0 10px;
+            }
+
+            #date-range {
+                padding: 10px 20px;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .day-date {
+                width: 100px;
+                height: 100px;
+                border: 1px solid lightgray;
+                border-radius: 5px;
+                text-align: center;
+                margin: 0 10px;
+                cursor: pointer;
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+
+            .day-date:hover {
+                background-color: lightgreen;
+                border: solid 1px green !important;
+            }
+
+            .day-date div {
+                font-size: 18px;
+                margin: unset;
+            }
+
+            .today {
+                border-color: gray;
+            }
+
+            .selected {
+                border-color: green;
+            }
+
+            .accordion {
+                display: flex;
+            }
+
+            .time-slot {
+                padding: 10px;
+                margin: 5px auto;
+                background-color: #eee;
+                color: #444;
+                cursor: pointer;
+                max-width: 600px;
+                width: 80%;
+                border: none;
+                border-radius: 20px;
+                text-align: left;
+                outline: none;
+                font-size: 15px;
+                transition: 0.4s;
+                text-align: center;
+            }
+
+            section h3 {
+                text-align: center;
+            }
+
+            details summary {
+                font-size: 1.4em;
+                padding: 10px;
+                border-bottom: solid 1px #ccc;
+                list-style: none;
+                text-align: center;
+            }
+
+            details[open]>summary:after {
+                content: " ";
+            }
+
+            details>summary:after {
+                content: " ";
+                font-weight: 900;
+                transform: rotate(45deg);
+                -webkit-transform: rotate(45deg);
+            }
+            
+            .selected {
+                background-color: lightblue;
+            }
+        </style>
+    </head>
+
+    <body>
+        <section>
+            <div class="contianer">
+                <div id="date-scheduler">
+                    <button id="previous">Previous</button>
+                    <p id="date-range" class="date-range"></p>
+                    <button id="next">Next</button>
+                </div>
+                <div id="day-dates-container">
+                    <div id="day-date-0" class="day-date"></div>
+                    <div id="day-date-1" class="day-date"></div>
+                    <div id="day-date-2" class="day-date"></div>
+                    <div id="day-date-3" class="day-date"></div>
+                    <div id="day-date-4" class="day-date"></div>
+                    <div id="day-date-5" class="day-date"></div>
+                    <div id="day-date-6" class="day-date"></div>
+                </div>
+                <h3>Appointments are 15 minutes long</h3>
+
+                <details class="accordion">
+                    <summary>Morning</summary>
+                    <span class="panel">
+                        <div class="time-slot" id="morning-slot-1">8:00 AM</div>
+                        <div class="time-slot" id="morning-slot-2">8:20 AM</div>
+                        <div class="time-slot" id="morning-slot-3">8:40 AM</div>
+                        <div class="time-slot" id="morning-slot-4">9:00 AM</div>
+                        <div class="time-slot" id="morning-slot-5">9:20 AM</div>
+                        <div class="time-slot" id="morning-slot-6">9:40 AM</div>
+                        <div class="time-slot" id="morning-slot-7">10:00 AM</div>
+                        <div class="time-slot" id="morning-slot-8">10:20 AM</div>
+                        <div class="time-slot" id="morning-slot-9">10:40 AM</div>
+                        <div class="time-slot" id="morning-slot-10">11:00 AM</div>
+                        <div class="time-slot" id="morning-slot-11">11:20 AM</div>
+                        <div class="time-slot" id="morning-slot-12">11:40 AM</div>
+                    </span>
+                </details>
+                <details>
+                    <summary>Afternoon</summary>
+                    <span class="panel">
+                        <div class="time-slot" id="afternoon-slot-1">12:00 PM</div>
+                        <div class="time-slot" id="afternoon-slot-2">12:20 PM</div>
+                        <div class="time-slot" id="afternoon-slot-3">12:40 PM</div>
+                        <div class="time-slot" id="afternoon-slot-4">1:00 PM</div>
+                        <div class="time-slot" id="afternoon-slot-5">1:20 PM</div>
+                        <div class="time-slot" id="afternoon-slot-6">1:40 PM</div>
+                        <div class="time-slot" id="afternoon-slot-7">2:00 PM</div>
+                        <div class="time-slot" id="afternoon-slot-8">2:20 PM</div>
+                        <div class="time-slot" id="afternoon-slot-9">2:40 PM</div>
+                        <div class="time-slot" id="afternoon-slot-10">3:00 PM</div>
+                        <div class="time-slot" id="afternoon-slot-11">3:20 PM</div>
+                        <div class="time-slot" id="afternoon-slot-12">3:40 PM</div>
+                        <div class="time-slot" id="afternoon-slot-13">4:00 PM</div>
+                        <div class="time-slot" id="afternoon-slot-14">4:20 PM</div>
+                        <div class="time-slot" id="afternoon-slot-15">4:40 PM</div>
+                    </span>
+                </details>
+                <details>
+                    <summary>Evening</summary>
+                    <span class="panel">
+                        <div class="time-slot" id="evening-slot-1">5:00 PM</div>
+                        <div class="time-slot" id="evening-slot-2">5:20 PM</div>
+                        <div class="time-slot" id="evening-slot-3">5:40 PM</div>
+                        <div class="time-slot" id="evening-slot-4">6:00 PM</div>
+                        <div class="time-slot" id="evening-slot-5">6:20 PM</div>
+                        <div class="time-slot" id="evening-slot-6">6:40 PM</div>
+                        <div class="time-slot" id="evening-slot-7">7:00 PM</div>
+                        <div class="time-slot" id="evening-slot-8">7:20 PM</div>
+                        <div class="time-slot" id="evening-slot-9">7:40 PM</div>
+                        <div class="time-slot" id="evening-slot-10">8:00 PM</div>
+                        <div class="time-slot" id="evening-slot-11">8:20 PM</div>
+                        <div class="time-slot" id="evening-slot-12">8:40 PM</div>
+                    </span>
+                </details>
+            </div>
+            </div>
+            </div>
+        </section>
+        <script>
+            const dateRange = document.querySelector('#date-range');
+            const previous = document.querySelector('#previous');
+            const next = document.querySelector('#next');
+
+            let start = new Date();
+            let end = new Date();
+            end.setDate(end.getDate() + 6);
+
+            dateRange.innerHTML = `${start.getMonth() + 1}/${start.getDate()}/${start.getFullYear().toString().slice(-2)} - ${end.getMonth() + 1}/${end.getDate()}/${end.getFullYear().toString().slice(-2)}`;
+
+            previous.addEventListener('click', function () {
+                start.setDate(start.getDate() - 7);
+                end.setDate(end.getDate() - 7);
+                dateRange.innerHTML = `${start.getMonth() + 1}/${start.getDate()}/${start.getFullYear().toString().slice(-2)} - ${end.getMonth() + 1}/${end.getDate()}/${end.getFullYear().toString().slice(-2)}`;
+            });
+
+            next.addEventListener('click', function () {
+                start.setDate(start.getDate() + 7);
+                end.setDate(end.getDate() + 7);
+                dateRange.innerHTML = `${start.getMonth() + 1}/${start.getDate()}/${start.getFullYear().toString().slice(-2)} - ${end.getMonth() + 1}/${end.getDate()}/${end.getFullYear().toString().slice(-2)}`;
+            });
+
+            const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+            // function to format date
+            const formatDate = date => {
+                let month = '' + (date.getMonth() + 1);
+                let day = '' + date.getDate();
+                let year = date.getFullYear();
+
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                return [month, day, year].join('/');
+            };
+
+            // function to update the date range
+            const updateDateRange = () => {
+                dateRange.textContent = `${formatDate(start)} - ${formatDate(end)}`;
+            };
+
+            // function to update the day dates
+            const updateDayDates = () => {
+                for (let i = 0; i < 7; i++) {
+                    const dayDate = document.querySelector(`#day-date-${i}`);
+                    const date = new Date(start);
+                    date.setDate(date.getDate() + i);
+                    dayDate.textContent = '';
+                    dayDate.style.borderColor = 'lightgray';
+
+                    const day = document.createElement('div');
+                    day.textContent = weekdays[date.getDay()];
+                    dayDate.appendChild(day);
+
+                    const dateNum = document.createElement('div');
+                    dateNum.textContent = date.getDate();
+                    dayDate.appendChild(dateNum);
+
+                    if (date.toDateString() === new Date().toDateString()) {
+                        dayDate.style.borderColor = 'gray', backgroundColor = '#888888';
+                    }
+
+                    dayDate.addEventListener('click', () => {
+                        dayDate.classList.toggle('selected');
+                    });
+                }
+            };
+
+            // function to update the date range and day dates
+            const update = () => {
+                updateDateRange();
+                updateDayDates();
+            };
+
+            previous.addEventListener('click', () => {
+                start.setDate(start.getDate() - 7);
+                end.setDate(end.getDate() - 7);
+                update();
+            });
+
+            next.addEventListener('click', () => {
+                start.setDate(start.getDate() + 7);
+                end.setDate(end.getDate() + 7);
+                update();
+            });
+
+            update();
+
+            // function to toggle the accordions
+            const toggleAccordion = (dayDate) => {
+                const accordions = dayDate.nextElementSibling;
+                accordions.classList.toggle('hidden');
+            };
+
+            // add event listeners for each day date to toggle the accordions
+            for (let i = 0; i < 7; i++) {
+                const dayDate = document.querySelector(`#day-date-${i}`);
+                dayDate.addEventListener('click', () => {
+                    toggleAccordion(dayDate);
+                });
+            }
+
+            update();
+
+            const timeSlots = document.querySelectorAll('.time-slot');
+
+            // Handle time slot clicks
+            for (let i = 0; i < timeSlots.length; i++) {
+                timeSlots[i].addEventListener("click", () => {
+                    const date = new Date();
+                    const slotDate = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+                    slotDate.setHours(timeSlots[i].dataset.hour);
+                    slotDate.setMinutes(timeSlots[i].dataset.minute);
+
+                    // Check if time slot is in the past
+                    if (slotDate < date) {
+                        alert("You can not Change or choose dates in the past");
+                        return;
+                    }
+
+                    // Highlight the time slot and date
+                    timeSlots[i].classList.toggle("selected");
+                    const dayIndex = timeSlots[i].dataset.day;
+                });
+            }
+
+        </script>
+    </body>
+
+</html>
